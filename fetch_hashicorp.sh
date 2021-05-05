@@ -49,6 +49,8 @@ echo "Fetching ${shasums_url}"
 ${CURL_CMD} ${shasums_url}
 if [ $? -ne 0 ]; then
     echo "Error fetching ${shasums_url}"
+    # Clean up.
+    rm -f ${package}_${version}_${platform}.zip
     exit 1
 fi
 
@@ -58,6 +60,8 @@ echo "Fetching ${sig_url}"
 ${CURL_CMD} ${sig_url}
 if [ $? -ne 0 ]; then
     echo "Error fetching ${sig_url}"
+    # Clean up.
+    rm -f ${package}_${version}_${platform}.zip ${package}_${version}_SHA256SUMS
     exit 1
 fi
 
@@ -65,6 +69,8 @@ fi
 gpg --verify ${package}_${version}_SHA256SUMS.sig ${package}_${version}_SHA256SUMS
 if [ $? -ne 0 ]; then
     echo "Signature file failed to verify!"
+    # Clean up.
+    rm -f ${package}_${version}_${platform}.zip ${package}_${version}_SHA256SUMS ${package}_${version}_SHA256SUMS.sig
     exit 1
 fi
 
@@ -72,8 +78,7 @@ fi
 shasum --ignore-missing -a 256 -c ${package}_${version}_SHA256SUMS
 if [ $? -ne 0 ]; then
     echo "Package failed to verify!"
+    # Clean up.
+    rm -f ${package}_${version}_${platform}.zip ${package}_${version}_SHA256SUMS ${package}_${version}_SHA256SUMS.sig
     exit 1
 fi
-
-# Clean up.
-rm -f ${package}_${version}_${platform}.zip ${package}_${version}_SHA256SUMS ${package}_${version}_SHA256SUMS.sig
