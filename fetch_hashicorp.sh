@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Simple fetcher for HashiCorp packages that verifies package integrity using the
+# public HashiCorp signing key.
+#
+# Usage:
+#  $ ./fetch_hashicorp.sh <package> <platform> <version>
+#
+# where
+#  <package>  is one of "vault", "terraform", "packer", etc.
+#  <platform> is a valid HashiCorp platform string, e.g. "linux_amd64".
+#  <version>  is a valid package semver, e.g. "1.7.1".
+#
+# If successful, a package will be left in the current directory.
+# If a package cannot be verified, nothing will be left.
+#
+# Exit codes:
+#  0: package downloaded and verified
+#  1: package or signatures unavailable, SHA256 sums failed verification, package failed verification.
+
 HC_KEY_ID="72D7468F"
 
 CURL_CMD="curl --remote-name --silent --show-error --fail "
