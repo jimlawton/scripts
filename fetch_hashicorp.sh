@@ -76,4 +76,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Clean up.
-rm -f ${package}_${version}_${platform}.zip ${package}/${package}_${version}_SHA256SUMS ${package}_${version}_SHA256SUMS.sig
+rm -f ${package}_${version}_${platform}.zip ${package}_${version}_SHA256SUMS ${package}_${version}_SHA256SUMS.sig
