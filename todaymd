@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
-/usr/local/bin/icalBuddy -f -b '' -npn -nc -ps "/ | /" -eep "notes,attendees,url" eventsToday | \
-    awk -F\| '
+/usr/local/bin/icalBuddyFixed -b '' -npn -nc -ps "/ | /" -eep "notes,attendees,url" eventsToday | \
+    /usr/local/bin/awk -F\| '
 { 
     if (NF>2) { 
         gsub(/ /,"",$3); 
@@ -12,4 +12,4 @@
         printf("- `%s`  %s\n", $2, $1); 
     } 
 }
-' | sed 's/\(https:\/\/[^ ]*\)/[zoom](\1)/'
+' | /usr/local/opt/gnu-sed/libexec/gnubin/sed 's/\(https:\/\/[^ ]*\)/[zoom](\1)/'
