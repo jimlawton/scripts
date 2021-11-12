@@ -12,6 +12,7 @@ import subprocess
 #
 # 2. Generate JSON for all apps available as casks in Homebrew:
 #    $ brew casks | grep -v d12frosted | grep -v zulu | grep -v git-toolbelt | grep -v '^Library' | xargs brew info --cask --json=v2 >allcasks.json
+#    $ brew search --casks --desc '' | awk -F: '{print $1}' | grep -v '^ '' | grep -v '^=' | xargs brew info --cask --json=v2 >allcasks.json
 
 
 def get_installed_apps():
