@@ -1,5 +1,10 @@
 #!/usr/local/bin/bash
-/usr/local/bin/icalBuddyFixed -b '' -npn -nc -ps "/ | /" -eep "notes,attendees,url" eventsToday | \
+option="eventsToday"
+if [ ! -z "$1" ]; then
+    option="eventsFrom:$1 to:$1"
+fi
+
+/usr/local/bin/icalBuddyFixed -b '' -npn -nc -ps "/ | /" -eep "notes,attendees,url" $option | \
     /usr/local/bin/awk -F\| '
 {
     if (NF>2) {
