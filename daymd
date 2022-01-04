@@ -12,6 +12,10 @@ fi
             # This is needed when eventsFrom is used, because it insists on always adding the date.
             gsub(/[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9] at /,"",$3);
         }
+        if (match($3, /[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9]/) != 0) {
+            # This is needed when eventsFrom is used, because it insists on always adding the date.
+            gsub(/[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9]/,"00:00-23:59",$3);
+        }
         gsub(/ /,"",$3);
         printf("- `%s`  %s %s\n", $3, $1, $2);
     } else if (NF==1) {
@@ -20,6 +24,10 @@ fi
         if (index($2, "at") != 0) {
             # This is needed when eventsFrom is used, because it insists on always adding the date.
             gsub(/[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9] at /,"",$2);
+        }
+        if (match($2, /[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9]/) != 0) {
+            # This is needed when eventsFrom is used, because it insists on always adding the date.
+            gsub(/[0-9]*[0-9] [A-Z][a-z][a-z] [0-9]*[0-9][0-9][0-9]/,"00:00-23:59",$2);
         }
         gsub(/ /,"",$2);
         printf("- `%s`  %s\n", $2, $1);
