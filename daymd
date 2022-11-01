@@ -1,23 +1,21 @@
 #!/opt/homebrew/bin/bash
 option="eventsToday"
+brew_prefix="$(brew --prefix)"
+ical_buddy="/opt/homebrew/bin/icalBuddy"
 
-if [ -e /usr/local/opt/gnu-sed/libexec/gnubin/sed ]; then
-    SED=/usr/local/opt/gnu-sed/libexec/gnubin/sed
+if [ -e ${brew_prefix}/opt/gnu-sed/libexec/gnubin/sed ]; then
+    SED=${brew_prefix}/opt/gnu-sed/libexec/gnubin/sed
 else
-    SED=/opt/homebrew/opt/gnu-sed/libexec/gnubin/sed
+    SED=${brew_prefix}/opt/gnu-sed/libexec/gnubin/sed
 fi
 
-if [ -e /usr/local/bin/awk ]; then
-    AWK=/usr/local/bin/awk
-else
-    AWK=/opt/homebrew/bin/awk
-fi
+AWK=${brew_prefix}/bin/awk
 
-if [ ! -z "$1" ]; then
+if [ -n "$1" ]; then
     option="eventsFrom:$1 to:$1"
 fi
 
-/opt/icalBuddy/icalBuddy -b '' -npn -nc -ps "/ | /" -nrd -eep "notes,attendees,url" $option | \
+${ical_buddy} -b '' -npn -nc -ps "/ | /" -nrd -eep "notes,attendees,url" ${option} | \
     ${AWK} -F\| '
 {
     if (NF>2) {
