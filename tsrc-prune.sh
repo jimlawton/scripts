@@ -13,8 +13,27 @@
 #  0: Tree pruned.
 #  1: Failed to remove repositories.
 
+set -e
+
+PRUNE=1
 TREE_ROOT=.
-if [ -n "$1" ]; then TREE_ROOT=$1; fi
+
+if [[ "$1" = "-n" ]]; then
+    PRUNE=0
+    shift
+fi
+
+if [ -n "$1" ]; then
+    TREE_ROOT=$1;
+else
+    TREE_ROOT=
+    curpath=$(pwd)
+    while [[ "$curpath" != "" && ! -e "$curpath/.tsrc" ]]; do
+        curpath=${curpath%/*}
+    done
+    TREE_ROOT="$curpath"
+fi
+echo "Tree root: $TREE_ROOT"
 
 # First get the list of repos in the manifest.
 MANIFEST_LIST=$(grep dest ${TREE_ROOT}/.tsrc/manifest/manifest.yml | awk -F\" '{print $2}' | sort)
@@ -25,7 +44,15 @@ REPO_LIST=$(find ${TREE_ROOT} -type d -exec test -e '{}/.git' \; -print -prune |
 # Find directories in REPO_LIST that are not in MANIFEST_LIST.
 PRUNE_LIST=$(diff -c <(echo "${MANIFEST_LIST}" ) <(echo "${REPO_LIST}") | grep '^+' | awk '{print $2}')
 
-for prunedir in ${PRUNE_LIST}; do
-    echo "Pruning ${prunedir}"
-    rm -rf $prunedir
-done
+if [[ -z "${PRUNE_LIST}" ]]; then
+    echo "Nothing to prune!"
+else
+    for prunedir in ${PRUNE_LIST}; do
+        if [[ "${PRUNE}" = "1" ]]; then
+            echo "Pruning ${prunedir}"
+            rm -rf $prunedir
+        else
+            echo "Would prune ${prunedir}"
+        fi
+    done
+fi
