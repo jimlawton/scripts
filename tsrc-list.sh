@@ -14,7 +14,18 @@
 #  1: Failure.
 
 TREE_ROOT=.
-if [ -n "$1" ]; then TREE_ROOT=$1; fi
+
+if [ -n "$1" ]; then
+    TREE_ROOT=$1;
+else
+    TREE_ROOT=
+    curpath=$(pwd)
+    while [[ "$curpath" != "" && ! -e "$curpath/.tsrc" ]]; do
+        curpath=${curpath%/*}
+    done
+    TREE_ROOT="$curpath"
+fi
+echo "# Tree root: $TREE_ROOT"
 
 MANIFEST_LIST=$(grep dest ${TREE_ROOT}/.tsrc/manifest/manifest.yml | awk -F\" '{print $2}' | sort)
 echo ${MANIFEST_LIST} | tr ' ' '\n'
