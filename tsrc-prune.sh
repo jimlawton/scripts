@@ -39,10 +39,10 @@ echo "Tree root: $TREE_ROOT"
 MANIFEST_LIST=$(grep dest ${TREE_ROOT}/.tsrc/manifest/manifest.yml | awk -F\" '{print $2}' | sort)
 
 # Next get the list of all repos in the tree.
-REPO_LIST=$(find ${TREE_ROOT} -type d -exec test -e '{}/.git' \; -print -prune | sed -e 's/\.\///' | grep -v .tsrc/manifest | sort)
+REPO_LIST=$(cd ${TREE_ROOT}; find . -type d -exec test -e '{}/.git' \; -print -prune | sed -e 's/\.\///' | grep -v .tsrc/manifest | sort)
 
 # Find directories in REPO_LIST that are not in MANIFEST_LIST.
-PRUNE_LIST=$(diff -c <(echo "${MANIFEST_LIST}" ) <(echo "${REPO_LIST}") | grep '^+' | awk '{print $2}')
+PRUNE_LIST=$(diff -c <(echo "${MANIFEST_LIST}") <(echo "${REPO_LIST}") | grep '^+' | awk '{print $2}')
 
 if [[ -z "${PRUNE_LIST}" ]]; then
     echo "Nothing to prune!"
