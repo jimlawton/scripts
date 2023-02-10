@@ -44,4 +44,4 @@ ${ical_buddy} -b '' -npn -nc -ps "/ | /" -nrd -eep "notes,attendees,url" ${optio
         printf("- `%s`  %s\n", $2, $1);
     }
 }
-' | ${SED} 's/\(https:\/\/[^ ]*\)/[zoom](\1)/'
+' | ${SED} 's/\(https:\/\/[^ ]*\)/[zoom](\1)/' | ${SED} 's/[ ]*Microsoft Teams Meeting[ ]*$//'
