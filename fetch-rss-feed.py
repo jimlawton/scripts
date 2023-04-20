@@ -35,16 +35,21 @@ def main(argv=None):
 
     for entry in reversed(feed.entries):
         title = f"{entry['title']}"
-        print(title)
         filename = "".join([c for c in title if c.isalpha() or c.isdigit() or c ==' ']).rstrip()
-        print(filename)
         os.makedirs(f"./{feed['feed']['title']}", exist_ok=True)
         filepath = f"./{feed['feed']['title']}/{filename}"
-        print(f"{filepath}.mp3")
         if os.path.exists(f"{filepath}.mp3"):
             print(f"Skipping {filepath}.mp3, already exists")
             continue
-        response = requests.get(entry["links"][0]["href"])
+        print(f"{filepath}.mp3")
+        uri = ""
+        for link in entry["links"]:
+            if link["type"] == "audio/mpeg":
+                uri = link["href"]
+        if not uri:
+            print("WARNING: failed to find audio/mpeg for link!")
+            continue
+        response = requests.get(uri)
         with open(f"{filepath}.mp3", 'wb') as f:
             f.write(response.content)
         with open(f"{filepath}.txt", 'w') as f:
