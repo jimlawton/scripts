@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# See: https://community.jamf.com/t5/jamf-connect/jamf-connect-sync-negative-password-expiration-time/m-p/238024
+
+if [[ -e "/Users/$USER/Library/Preferences/com.jamf.connect.state.plist" ]]
+then
+    echo "Deleting /Users/$USER/Library/Preferences/com.jamf.connect.state.plist"
+    rm "/Users/$USER/Library/Preferences/com.jamf.connect.state.plist"
+    sudo shutdown -r +1
+fi
+
