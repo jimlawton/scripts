@@ -1,6 +1,6 @@
 #!/opt/homebrew/bin/bash
 option="eventsToday"
-brew_prefix="$(brew --prefix)"
+brew_prefix="$(/opt/homebrew/bin/brew --prefix)"
 ical_buddy="/opt/homebrew/bin/icalBuddy"
 
 if [ -e ${brew_prefix}/opt/gnu-sed/libexec/gnubin/sed ]; then
